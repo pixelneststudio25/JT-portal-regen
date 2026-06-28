@@ -158,18 +158,30 @@ function initGallery() {
   var scroll = document.getElementById('galleryScroll');
   if (!scroll) return;
 
-  // These are placeholder images – replace with your own camp photos.
-  // Using Unsplash for demo, but you can swap with local paths.
+  
   var photos = [
-    { label: 'Worship night', src: 'https://images.unsplash.com/photo-1506784365847-bad9fdd2e4f2?w=400&h=300&fit=crop' },
-    { label: 'Group games', src: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400&h=300&fit=crop' },
-    { label: 'Sessions', src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop' },
-    { label: 'Outdoor fun', src: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=300&fit=crop' },
-    { label: 'Group photo', src: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=400&h=300&fit=crop' },
-    { label: 'Encounter', src: 'https://images.unsplash.com/photo-1519832979-6fa0836ff7b8?w=400&h=300&fit=crop' },
-    { label: 'Creative tracks', src: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&h=300&fit=crop' },
-    { label: 'Finale', src: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&h=300&fit=crop' }
-  ];
+    // === First batch (10 images) ===
+    { label: 'Worship Night', src: 'IMG_5872.jpg' },
+    { label: 'Group Games', src: 'IMG_5900.jpg' },
+    { label: 'Sessions', src: 'IMG_5908.jpg' },
+    { label: 'Outdoor Fun', src: 'IMG_6343.jpg' },
+    { label: 'Group Photo', src: 'IMG_6397.jpg' },
+    { label: 'Encounter', src: 'IMG_6402.jpg' },
+    { label: 'Creative Tracks', src: 'IMG_6419.jpg' },
+    { label: 'Finale', src: 'IMG_6421.jpg' },
+    { label: 'Camp Highlights', src: 'IMG_6460.jpg' },
+    { label: 'Main Worship', src: 'IMG_6537.jpg' },
+
+    // === New batch (8 images) ===
+    { label: 'Arrival & Check-in', src: 'IMG_5181.jpg' },
+    { label: 'Icebreakers', src: 'IMG_5183.jpg' },
+    { label: 'Worship Moments', src: 'IMG_5189.jpg' },
+    { label: 'Teaching Session', src: 'IMG_5192.jpg' },
+    { label: 'Games & Fun', src: 'IMG_5200.jpg' },
+    { label: 'Small Groups', src: 'IMG_5209.jpg' },
+    { label: 'Prayer Session', src: 'IMG_5210.jpg' },
+    { label: 'Group Activities', src: 'IMG_5215.jpg' }
+];
 
   scroll.innerHTML = '';
   photos.forEach(function(photo) {
