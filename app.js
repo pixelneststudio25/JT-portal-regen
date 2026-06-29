@@ -305,3 +305,61 @@ document.addEventListener('DOMContentLoaded', function() {
   // Set current year in footer
   document.getElementById('year').textContent = new Date().getFullYear();
 });
+
+
+
+// ---- Requirements Page: Gateway + Display ----
+document.addEventListener('DOMContentLoaded', function() {
+  const gateway = document.getElementById('genderGateway');
+  const display = document.getElementById('requirementsDisplay');
+  const boysList = document.getElementById('boysList');
+  const girlsList = document.getElementById('girlsList');
+  const changeBtn = document.getElementById('changeGenderBtn');
+  const cards = document.querySelectorAll('.gender-card');
+
+  function showGender(gender) {
+    // Hide gateway with fade, show display
+    gateway.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    gateway.style.opacity = '0';
+    gateway.style.transform = 'scale(0.95)';
+    
+    setTimeout(() => {
+      gateway.style.display = 'none';
+      display.style.display = 'block';
+      // Trigger the fade-in animation
+      requestAnimationFrame(() => {
+        display.classList.add('visible');
+      });
+    }, 400);
+
+    // Show the correct list
+    if (gender === 'boys') {
+      boysList.style.display = 'block';
+      girlsList.style.display = 'none';
+    } else {
+      boysList.style.display = 'none';
+      girlsList.style.display = 'block';
+    }
+  }
+
+  function resetToGateway() {
+    display.classList.remove('visible');
+    display.style.display = 'none';
+    gateway.style.display = 'block';
+    requestAnimationFrame(() => {
+      gateway.style.opacity = '1';
+      gateway.style.transform = 'scale(1)';
+    });
+  }
+
+  // Card click listeners
+  cards.forEach(card => {
+    card.addEventListener('click', function() {
+      const gender = this.dataset.gender;
+      showGender(gender);
+    });
+  });
+
+  // Change button listener
+  changeBtn.addEventListener('click', resetToGateway);
+});
