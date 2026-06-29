@@ -87,7 +87,7 @@ function initReveal() {
 var _countdownInterval = null;
 function startCountdown() {
   var target = new Date(CAMP_DATE).getTime();
-  if (isNaN(target)) target = new Date('2026-08-13T08:00:00').getTime();
+  if (isNaN(target)) target = new Date('2026-08-19T08:00:00').getTime();
 
   var elDays = document.getElementById('cd-days');
   var elHours = document.getElementById('cd-hours');
@@ -161,6 +161,9 @@ function initGallery() {
   
   var photos = [
     // === First batch (10 images) ===
+    { label: 'Moments', src: 'IMG-20260629-WA0003.jpg' },
+    { label: 'Moments', src: 'IMG-20260629-WA0004.jpg' },
+    { label: 'Sessions', src: 'IMG-20260629-WA0005.jpg' },
     { label: 'Moments', src: 'IMG_5872.jpg' },
     { label: 'Moments', src: 'IMG_5900.jpg' },
     { label: 'Sessions', src: 'IMG_5908.jpg' },
