@@ -203,7 +203,7 @@ h1,h2,h3,h4 {
   font-weight: 700;
   letter-spacing: 4px;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   animation: fadeUp 0.8s 0.3s ease-out both;
 }
 
@@ -333,7 +333,7 @@ h1,h2,h3,h4 {
 }
 .hero-bg-overlay {
   position: absolute; inset: 0;
-  background: radial-gradient(circle at center, rgba(6,8,14,0.3) 0%, var(--bg-deep) 90%);
+  background: radial-gradient(circle at center, rgba(6,8,14,0.2) 0%, var(--bg-deep) 95%);
 }
 .hero-content {
   max-width: 880px;
@@ -397,8 +397,8 @@ h1,h2,h3,h4 {
 }
 
 @keyframes underlinePulse {
-  0%, 100% { width: 50%; opacity: 0.8; }
-  50% { width: 80%; opacity: 1; }
+  0%, 100% { width: 70%; opacity: 0.8; }
+  70% { width: 90%; opacity: 1; }
 }
 .hero-tagline {
   color: var(--gold); font-weight: 700; letter-spacing: 0.5px;
@@ -494,7 +494,7 @@ h1,h2,h3,h4 {
   width: max-content;
 }
 .gallery-scroll .gallery-item {
-  width: 280px;
+  width: 380px;
   flex-shrink: 0;
   scroll-snap-align: start;
   aspect-ratio: 4/3;
@@ -507,7 +507,7 @@ h1,h2,h3,h4 {
   cursor: pointer;
 }
 .gallery-scroll .gallery-item:hover {
-  transform: scale(1.04);
+  transform: scale(1.06);
   box-shadow: 0 16px 32px rgba(202,165,60,0.3);
 }
 .gallery-scroll .gallery-item img {
@@ -679,13 +679,13 @@ h1,h2,h3,h4 {
   .nav-links { display: none; }
   .nav-toggle { display: block; }
   .footer-grid { grid-template-columns: 1fr; }
-  .gallery-scroll .gallery-item { width: 220px; }
+  .gallery-scroll .gallery-item { width: 280px; }
 }
 @media (max-width: 680px) {
   .hero-logo {
     width: 90px;
     height: 90px;
-    margin: 60px auto 24px;        /* keep centered on mobile too */
+    margin: 70px auto 24px;        /* keep centered on mobile too */
   }
 }
 
@@ -704,4 +704,228 @@ h1,h2,h3,h4 {
   max-width: 700px;
   text-transform: uppercase;
   animation: fadeUp 1s 0.6s ease-out both;
+}
+
+/* ============================================================
+   REQUIREMENTS PAGE — Responsive Grid & Mobile Tweaks
+   ============================================================ */
+
+/* --- Two-column layout (desktop default) --- */
+.requirements-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+/* --- Tablet: Stack into single column --- */
+@media (max-width: 900px) {
+    .requirements-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    /* optional: reduce padding on the glass cards so they breathe better */
+    .requirements-grid .glass {
+        padding: 24px 20px !important;
+    }
+}
+
+/* --- Mobile: Tighter padding & smaller text --- */
+@media (max-width: 680px) {
+    .requirements-grid {
+        gap: 24px;
+    }
+
+    .requirements-grid .glass {
+        padding: 20px 16px !important;
+    }
+
+    .requirements-grid h3 {
+        font-size: 1.4rem !important;
+        margin-bottom: 12px !important;
+    }
+
+    .requirements-grid ul li {
+        font-size: 0.92rem !important;
+        gap: 10px !important;
+    }
+
+    /* keep the note section neat */
+    .requirements-note {
+        padding-top: 20px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .requirements-note p {
+        padding-top: 16px !important;
+    }
+}
+
+/* --- Extra small screens (e.g. iPhone SE) --- */
+@media (max-width: 400px) {
+    .requirements-grid .glass {
+        padding: 16px 12px !important;
+    }
+
+    .requirements-grid ul li {
+        font-size: 0.85rem !important;
+    }
+}
+/* ---- Requirements Page: Gender Toggle & Animations ---- */
+
+.gender-btn {
+  padding: 14px 40px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  background: transparent;
+  color: var(--text-soft);
+  border: 2px solid var(--glass-border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.gender-btn.active {
+  background: var(--gold);
+  color: var(--bg-deep);
+  border-color: var(--gold);
+  box-shadow: 0 8px 30px rgba(202, 165, 60, 0.3);
+}
+
+.gender-btn:hover:not(.active) {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- Responsive for the toggle ---- */
+@media (max-width: 680px) {
+  .gender-btn {
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    flex: 1;
+    min-width: 120px;
+  }
+  .gender-toggle {
+    gap: 12px;
+  }
+  .requirements-display {
+    padding: 24px 16px !important;
+  }
+  .requirements-display ul li {
+    font-size: 0.92rem !important;
+  }
+  .requirements-display h3 {
+    font-size: 1.3rem !important;
+  }
+}
+
+/* ---- Gender Gateway (Cards) ---- */
+.gender-gateway {
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+
+.gender-options {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.gender-card {
+  flex: 1;
+  min-width: 180px;
+  padding: 40px 20px;
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: var(--radius);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.gender-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--gold);
+  box-shadow: 0 16px 40px rgba(202, 165, 60, 0.15);
+}
+
+.gender-card:active {
+  transform: scale(0.97);
+}
+
+.gender-symbol {
+  display: block;
+  font-size: 3.2rem;
+  font-weight: 300;
+  color: var(--gold);
+  margin-bottom: 12px;
+  line-height: 1;
+}
+
+.gender-label {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+/* ---- Requirements Display ---- */
+.requirements-display {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.requirements-display.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- "Change" button hover ---- */
+#changeGenderBtn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 680px) {
+  .gender-card {
+    min-width: 140px;
+    padding: 30px 16px;
+  }
+  .gender-symbol {
+    font-size: 2.6rem;
+  }
+  .gender-label {
+    font-size: 1rem;
+  }
+  .gender-options {
+    gap: 16px;
+  }
+  .requirements-display {
+    padding: 20px 16px !important;
+  }
+  .requirements-display ul li {
+    font-size: 0.92rem !important;
+  }
+  .requirements-display h3 {
+    font-size: 1.3rem !important;
+  }
 }
