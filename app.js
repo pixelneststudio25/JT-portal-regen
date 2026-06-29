@@ -161,21 +161,21 @@ function initGallery() {
   
   var photos = [
     // === First batch (10 images) ===
-    { label: 'Worship Night', src: 'IMG_5872.jpg' },
-    { label: 'Group Games', src: 'IMG_5900.jpg' },
+    { label: 'Moments', src: 'IMG_5872.jpg' },
+    { label: 'Moments', src: 'IMG_5900.jpg' },
     { label: 'Sessions', src: 'IMG_5908.jpg' },
-    { label: 'Outdoor Fun', src: 'IMG_6343.jpg' },
-    { label: 'Group Photo', src: 'IMG_6397.jpg' },
-    { label: 'Encounter', src: 'IMG_6402.jpg' },
+    { label: 'Moments', src: 'IMG_6343.jpg' },
+    { label: 'Moments', src: 'IMG_6397.jpg' },
+    { label: 'Moments', src: 'IMG_6402.jpg' },
     { label: 'Creative Tracks', src: 'IMG_6419.jpg' },
-    { label: 'Finale', src: 'IMG_6421.jpg' },
+    { label: 'Moments', src: 'IMG_6421.jpg' },
     { label: 'Camp Highlights', src: 'IMG_6460.jpg' },
     { label: 'Main Worship', src: 'IMG_6537.jpg' },
 
     // === New batch (8 images) ===
     { label: 'Arrival & Check-in', src: 'IMG_5181.jpg' },
-    { label: 'Icebreakers', src: 'IMG_5183.jpg' },
-    { label: 'Worship Moments', src: 'IMG_5189.jpg' },
+    { label: 'Moments', src: 'IMG_5183.jpg' },
+    { label: 'Moments', src: 'IMG_5189.jpg' },
     { label: 'Teaching Session', src: 'IMG_5192.jpg' },
     { label: 'Games & Fun', src: 'IMG_5200.jpg' },
     { label: 'Small Groups', src: 'IMG_5209.jpg' },
@@ -206,7 +206,7 @@ function initGallery() {
 
     var tag = document.createElement('span');
     tag.className = 'edition-tag';
-    tag.textContent = 'Edition 4';
+    tag.textContent = 'Grounded';
     item.appendChild(tag);
 
     item.addEventListener('click', function() {
