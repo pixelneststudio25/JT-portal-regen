@@ -108,7 +108,7 @@ h1,h2,h3,h4 {
 }
 
 .text-gradient {
-  background: linear-gradient(120deg, var(--gold-bright), var(--cta));
+  background: linear-gradient(120deg, var(--gold-bright), var(--gold));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -163,13 +163,16 @@ h1,h2,h3,h4 {
 }
 
 .btn-ghost {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--glass-border);
-  color: var(--text);
+  background: rgba(202, 165, 60, 0.08);
+  border: 1px solid rgba(202, 165, 60, 0.5);
+  color: var(--gold);
   backdrop-filter: blur(10px);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
+
 .btn-ghost:hover {
-  background: rgba(255,255,255,0.12);
+  background: rgba(202, 165, 60, 0.15);
+  border-color: var(--gold);
   transform: translateY(-3px);
 }
 
@@ -319,59 +322,129 @@ h1,h2,h3,h4 {
 }
 
 /* ---- HERO ---- */
+
+/*
+  CHANGES SUMMARY:
+  1. Consolidated dual darkening (opacity + overlay) into one clean overlay
+  2. Fixed hero-logo z-index stacking with explicit isolation
+  3. Removed redundant 70px top margin on hero-logo
+  4. Gave hero-theme and hero-tagline distinct visual roles (no more competition)
+  5. Fixed h1 line-height from 0.98 → 1.05 to prevent descender clipping
+  6. Replaced --ease variable reference with an explicit cubic-bezier
+  7. Reduced simultaneous animations from 4 to 2 (float removed, glowPulse kept)
+  8. Added border-radius to .cd-unit so countdown pills match the rendered design
+  9. Added @media (prefers-reduced-motion) for accessibility
+*/
+
 .hero {
-  position: relative; min-height: 100vh;
-  display: grid; place-items: center; text-align: center;
-  padding: 120px var(--gutter) 60px; overflow: hidden;
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 120px var(--gutter) 60px;
+  overflow: hidden;
 }
+
+/* --- Background ---
+   FIXED: Removed opacity: 0.45 from the image.
+   Now the overlay alone controls darkness — one knob, not two.
+   Tweak the stop percentages (0.55 → lower = lighter photo visible) */
 .hero-bg {
-  position: absolute; inset: 0; z-index: -1;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
+
 .hero-bg-img {
-  width: 100%; height: 100%; object-fit: cover;
-  opacity: 0.45;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* No opacity here — overlay handles darkening */
 }
+
 .hero-bg-overlay {
-  position: absolute; inset: 0;
-  background: radial-gradient(circle at center, rgba(6,8,14,0.2) 0%, var(--bg-deep) 95%);
+  position: absolute;
+  inset: 0;
+  /* Single unified overlay: subtle center, deep edges */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(6, 8, 14, 0.55) 0%,
+    rgba(6, 8, 14, 0.80) 100%
+  );
 }
+
+/* --- Content ---
+   FIXED: Added isolation so z-index children stack correctly */
 .hero-content {
   max-width: 880px;
-  animation: rise 1.2s var(--ease) both;
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  animation: rise 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+/* --- Logo ---
+   FIXED: Removed 70px top margin (hero padding already handles spacing).
+   FIXED: isolation: isolate so glow z-index: -1 stays inside this context */
 .hero-logo {
-  margin: 70px auto 24px;          /* center horizontally */
+  margin: 0 auto 24px;
   width: 120px;
   height: 120px;
   position: relative;
   display: grid;
   place-items: center;
-}  
-.hero-logo-svg {
-  width: 100%; height: 100%;
-  filter: drop-shadow(0 0 20px rgba(202,165,60,0.7));
-  animation: float 5s ease-in-out infinite;
+  isolation: isolate;
 }
+
+.hero-logo-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 20px rgba(202, 165, 60, 0.7));
+  /* FIXED: Removed float animation — reduces motion noise.
+     The glow pulse alone is enough ambient life. */
+}
+
 .hero-logo-glow {
-  position: absolute; inset: -12px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(202,165,60,0.4), transparent 70%);
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(202, 165, 60, 0.4), transparent 70%);
   z-index: -1;
+  /* FIXED: This now correctly stays inside .hero-logo's stacking context */
   animation: glowPulse 3s infinite alternate;
 }
+
+/* --- Edition Badge --- */
 .edition-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(202,165,60,0.1); border: 1px solid var(--gold);
-  color: var(--gold); padding: 7px 18px; border-radius: 100px;
-  font-weight: 700; font-size: 0.85rem; letter-spacing: 2px;
-  margin-bottom: 22px; backdrop-filter: blur(6px);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(202, 165, 60, 0.1);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 7px 18px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  margin-bottom: 22px;
+  backdrop-filter: blur(6px);
 }
+
+/* --- Headline ---
+   FIXED: line-height 0.98 → 1.05 prevents descender clipping at large sizes */
 .hero h1 {
   font-size: clamp(2.8rem, 8vw, 5.8rem);
   font-weight: 900;
-  line-height: 0.98;
-  margin-bottom: 18px;
-  text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+  line-height: 1.05;
+  margin-bottom: 14px;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
+
+/* --- "Summer Camp" subtitle (hero-theme)
+   FIXED: Now clearly the SECONDARY headline — warm gold, slightly smaller.
+   Distinct from hero-tagline by role: this names the event type. */
 .hero-theme {
   font-size: clamp(1.4rem, 3vw, 2.2rem);
   font-weight: 800;
@@ -379,8 +452,8 @@ h1,h2,h3,h4 {
   letter-spacing: 1px;
   position: relative;
   display: inline-block;
-  margin: 0 auto 14px;
-  padding-bottom: 12px;
+  margin: 0 auto 20px;
+  padding-bottom: 14px;
 }
 
 .hero-theme::after {
@@ -390,46 +463,98 @@ h1,h2,h3,h4 {
   bottom: 0;
   transform: translateX(-50%);
   width: 60%;
-  height: 3px;
+  height: 2px;
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
   border-radius: 4px;
   animation: underlinePulse 2.5s ease-in-out infinite;
 }
 
 @keyframes underlinePulse {
-  0%, 100% { width: 70%; opacity: 0.8; }
-  70% { width: 90%; opacity: 1; }
-}
-.hero-tagline {
-  color: var(--gold); font-weight: 700; letter-spacing: 0.5px;
-  margin-bottom: 23px; font-size: 1.1rem;
-}
-.hero-actions {
-  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
-  margin-bottom: 50px;
+  0%, 100% { width: 60%; opacity: 0.7; }
+  50%       { width: 85%; opacity: 1;   }
 }
 
-/* Countdown */
+/* --- "Different by Design" tagline
+   FIXED: Now clearly TERTIARY — muted color, lighter weight, smaller size.
+   No longer competes with .hero-theme. Reads as a supporting descriptor. */
+.hero-tagline {
+  color: rgba(202, 165, 60, 0.65);  /* gold, but muted — visually subordinate */
+  font-weight: 500;                  /* lighter than hero-theme's 800 */
+  font-style: italic;
+  letter-spacing: 3px;
+  margin-bottom: 28px;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+}
+
+/* --- CTA Buttons --- */
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+/* --- Countdown
+   FIXED: Added border-radius: 12px and explicit border so the pill/card
+   shape matches what's actually rendered — no longer relying on a missing rule. */
 .countdown {
-  display: flex; gap: clamp(10px, 3vw, 22px); justify-content: center;
+  display: flex;
+  gap: clamp(10px, 3vw, 22px);
+  justify-content: center;
   flex-wrap: wrap;
 }
+
 .cd-unit {
-  min-width: 90px; padding: 20px 10px; text-align: center;
+  min-width: 90px;
+  padding: 18px 14px;
+  text-align: center;
   backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(202, 165, 60, 0.25);
+  border-radius: 12px;                        /* FIXED: was missing, now matches render */
 }
+
 .cd-num {
   font-weight: 900;
   font-size: clamp(1.8rem, 5vw, 2.8rem);
-  color: var(--gold-bright); line-height: 1;
+  color: var(--gold-bright);
+  line-height: 1;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 18px rgba(202,165,60,0.6);
-}
-.cd-label {
-  font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--text-muted); margin-top: 8px; font-weight: 600;
+  text-shadow: 0 0 18px rgba(202, 165, 60, 0.6);
 }
 
+/* FIXED: Bumped from 0.7rem → 0.75rem and reduced letter-spacing slightly
+   so labels are easier to read without squinting */
+.cd-label {
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+/* --- Keyframes --- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes glowPulse {
+  from { opacity: 0.4; transform: scale(1);    }
+  to   { opacity: 0.9; transform: scale(1.12); }
+}
+
+/* --- Accessibility: respect reduced motion preference --- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-content,
+  .hero-logo-glow,
+  .hero-theme::after {
+    animation: none;
+  }
+}
 /* ---- ABOUT & CAMP INFO ---- */
 .about-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;
