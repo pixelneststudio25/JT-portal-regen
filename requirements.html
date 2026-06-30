@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Requirements — Jesus Tribe Camp 2026</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Main styles (shared with home page) -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Page‑specific styles -->
+  <style>
+    /* ===== GENDER GATEWAY ===== */
+    .gender-gateway {
+      max-width: 600px;
+      margin: 0 auto 20px;
+    }
+
+    .gender-options {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .gender-card {
+      flex: 1;
+      min-width: 180px;
+      padding: 40px 20px;
+      background: var(--glass-bg);
+      border: 2px solid var(--glass-border);
+      border-radius: var(--radius);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      user-select: none;
+    }
+
+    .gender-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+      box-shadow: 0 16px 40px rgba(202, 165, 60, 0.15);
+    }
+
+    .gender-card:active {
+      transform: scale(0.97);
+    }
+
+    .gender-symbol {
+      display: block;
+      font-size: 3.2rem;
+      font-weight: 300;
+      color: var(--gold);
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+
+    .gender-label {
+      display: block;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    /* ===== REQUIREMENTS DISPLAY ===== */
+    .requirements-display {
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .requirements-display.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== "CHANGE" BUTTON ===== */
+    #changeGenderBtn {
+      display: block;
+      margin: 0 0 20px auto;
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--glass-border);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    #changeGenderBtn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 680px) {
+      .gender-card {
+        min-width: 140px;
+        padding: 30px 16px;
+      }
+      .gender-symbol {
+        font-size: 2.6rem;
+      }
+      .gender-label {
+        font-size: 1rem;
+      }
+      .gender-options {
+        gap: 16px;
+      }
+      .requirements-display {
+        padding: 20px 16px !important;
+      }
+      .requirements-display ul li {
+        font-size: 0.92rem !important;
+      }
+      .requirements-display h3 {
+        font-size: 1.3rem !important;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .gender-card {
+        min-width: 120px;
+        padding: 24px 12px;
+      }
+      .gender-symbol {
+        font-size: 2.2rem;
+      }
+      .gender-label {
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav class="nav scrolled" style="position:relative; background:rgba(6,8,14,0.9); border-bottom:1px solid var(--line);">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand">
+        <span class="nav-logo">
+          <span class="logo-fallback">JT</span>
+        </span>
+        <span class="nav-brand-text">
+          Jesus Tribe
+          <small>TCN ABUJA · EDITION 4</small>
+        </span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#info">Camp Info</a></li>
+        <li><a href="requirements.html" style="color:var(--gold);">Requirements</a></li>
+        <li><a href="index.html#gallery">Gallery</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="https://forms.gle/your-form-link-here" target="_blank" rel="noopener" class="btn btn-gold nav-register">Register</a></li>
+      </ul>
+      <button class="nav-toggle" style="display:none;">☰</button>
+    </div>
+  </nav>
+
+  <!-- ===== REQUIREMENTS SECTION ===== -->
+  <section class="section" style="padding-top:100px;">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Come Prepared</span>
+        <h2>What To <span class="text-gradient">Bring</span></h2>
+        <p>Select your gender to view your personalized packing list.</p>
+      </div>
+
+      <!-- === STEP 1: GENDER GATEWAY === -->
+      <div id="genderGateway" class="gender-gateway reveal">
+        <div class="gender-options">
+          <!-- Boys Card -->
+          <div class="gender-card" data-gender="boys">
+            <span class="gender-symbol">♂</span>
+            <span class="gender-label">Boys</span>
+          </div>
+          <!-- Girls Card -->
+          <div class="gender-card" data-gender="girls">
+            <span class="gender-symbol">♀</span>
+            <span class="gender-label">Girls</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- === STEP 2: REQUIREMENTS DISPLAY (hidden by default) === -->
+      <div id="requirementsDisplay" class="requirements-display glass" style="display:none; padding:36px 32px; max-width:760px; margin:0 auto; min-height:320px;">
+
+        <!-- Change Button -->
+        <button id="changeGenderBtn">↻ Change</button>
+
+        <!-- BOYS LIST -->
+        <div id="boysList" class="req-list-content" style="display:none;">
+          <h3 style="font-size:1.6rem; margin-bottom:20px; color:var(--gold); text-align:center;">For the Guys</h3>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:14px;">
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Bible and notebook
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Toiletries (toothbrush, paste, soap, towel)
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> 3–4 changes of casual clothes (shorts, t‑shirts)
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> 1 smart outfit (for group photos)
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Pyjamas / sleepwear
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Sports wear and trainers
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Personal medication (if any)
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Water bottle and snacks (optional)
+            </li>
+          </ul>
+        </div>
+
+        <!-- GIRLS LIST -->
+        <div id="girlsList" class="req-list-content" style="display:none;">
+          <h3 style="font-size:1.6rem; margin-bottom:20px; color:var(--gold); text-align:center;">For the Ladies</h3>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:14px;">
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Bible and notebook
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Toiletries (toothbrush, paste, soap, towel, sanitary items)
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> 3–4 changes of casual clothes (tops, skirts/shorts)
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> 1 smart dress / outfit (for group photos)
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Pyjamas / sleepwear
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Sports wear and trainers
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Personal medication / hair care items
+            </li>
+            <li style="display:flex; gap:14px; align-items:flex-start; color:var(--text-soft); font-size:1rem;">
+              <span style="color:var(--gold); font-weight:700; font-size:1.2rem;">✓</span> Water bottle and snacks (optional)
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div style="text-align:center; margin-top:40px; color:var(--text-muted); font-size:0.95rem;">
+        <p style="border-top:1px solid var(--line); padding-top:24px;">
+          ⚠️ <strong style="color:var(--gold);">Important:</strong> All items are subject to change – check back closer to the camp date for final updates.
+        </p>
+        <p style="margin-top:12px;">
+          <a href="index.html" style="color:var(--gold); font-weight:600;">← Back to Home</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" style="margin-top:40px;">
+    <div class="container">
+      <div class="footer-grid" style="display:grid; grid-template-columns:2fr 1fr 1fr; gap:36px; margin-bottom:40px;">
+        <div>
+          <div class="footer-brand">
+            <span class="nav-logo"><span class="logo-fallback">JT</span></span>
+            <span class="nav-brand-text">Jesus Tribe<small style="color:var(--gold);">TCN ABUJA</small></span>
+          </div>
+          <p>The teenagers' ministry of The Covenant Nation, Abuja.</p>
+        </div>
+        <div>
+          <h5>Camp</h5>
+          <p>13–17 Aug 2026 · Abuja</p>
+          <p style="margin-top:6px; font-weight:600; color:var(--gold);">Theme: Different by Design</p>
+        </div>
+        <div>
+          <h5>Quick Links</h5>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#gallery">Gallery</a></li>
+            <li><a href="https://forms.gle/your-form-link-here" target="_blank" rel="noopener">Register</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="border-top:1px solid var(--line); padding-top:22px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+        <small>© 2026 Jesus Tribe — TCN Abuja. All rights reserved.</small>
+        <a href="index.html" style="color:var(--text-faint);">Back to main site</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+      const gateway = document.getElementById('genderGateway');
+      const display = document.getElementById('requirementsDisplay');
+      const boysList = document.getElementById('boysList');
+      const girlsList = document.getElementById('girlsList');
+      const changeBtn = document.getElementById('changeGenderBtn');
+      const cards = document.querySelectorAll('.gender-card');
+
+      // If any element is missing, stop
+      if (!gateway || !display || !boysList || !girlsList || !changeBtn || !cards.length) {
+        console.warn('Requirements: Missing one or more elements.');
+        return;
+      }
+
+      // ---- Show the selected gender's list ----
+      function showGender(gender) {
+        // Fade out gateway
+        gateway.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+        gateway.style.opacity = '0';
+        gateway.style.transform = 'scale(0.96)';
+
+        setTimeout(function() {
+          gateway.style.display = 'none';
+
+          // Show the display container
+          display.style.display = 'block';
+          // Force a reflow so the transition triggers
+          void display.offsetHeight;
+          display.classList.add('visible');
+
+          // Show the correct list
+          if (gender === 'boys') {
+            boysList.style.display = 'block';
+            girlsList.style.display = 'none';
+          } else if (gender === 'girls') {
+            boysList.style.display = 'none';
+            girlsList.style.display = 'block';
+          }
+        }, 380);
+      }
+
+      // ---- Reset to gateway ----
+      function resetToGateway() {
+        // Hide the display
+        display.classList.remove('visible');
+        display.style.display = 'none';
+
+        // Show the gateway with a smooth fade-in
+        gateway.style.display = 'block';
+        // Force reflow
+        void gateway.offsetHeight;
+        gateway.style.opacity = '1';
+        gateway.style.transform = 'scale(1)';
+      }
+
+      // ---- Attach click listeners to cards ----
+      cards.forEach(function(card) {
+        card.addEventListener('click', function(e) {
+          var gender = this.getAttribute('data-gender');
+          if (gender) showGender(gender);
+        });
+      });
+
+      // ---- Attach click listener to "Change" button ----
+      changeBtn.addEventListener('click', resetToGateway);
+
+      // ---- (Optional) Keyboard support: Enter/Space on cards ----
+      cards.forEach(function(card) {
+        card.setAttribute('tabindex', '0');
+        card.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            var gender = this.getAttribute('data-gender');
+            if (gender) showGender(gender);
+          }
+        });
+      });
+
+    }); // end DOMContentLoaded
+  </script>
+
+  <!-- Simple scroll reveal (copied from main site) -->
+  <script>
+    (function() {
+      var reveals = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              obs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        reveals.forEach(function(r) { obs.observe(r); });
+      } else {
+        reveals.forEach(function(r) { r.classList.add('visible'); });
+      }
+    })();
+  </script>
+
+</body>
+</html>
