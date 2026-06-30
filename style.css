@@ -108,10 +108,18 @@ h1,h2,h3,h4 {
 }
 
 .text-gradient {
-  background: linear-gradient(120deg, var(--gold-bright), var(--gold));
+  background: linear-gradient(135deg,
+    #F5E6A3 0%,      /* bright champagne reflection */
+    #C9A84C 30%,     /* mid‑gold body */
+    #F7E7B9 65%,     /* hot‑spot highlight */
+    #A87D2E 100%     /* deep bronze shadow – adds weight */
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+
+  /* Optional: add a subtle outer glow for extra "quality" */
+  filter: drop-shadow(0 4px 20px rgba(202, 165, 60, 0.35));
 }
 
 /* ---- BUTTONS & GLOW EFFECTS ---- */
