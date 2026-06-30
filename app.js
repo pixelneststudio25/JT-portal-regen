@@ -21,12 +21,42 @@ function toast(msg, type) {
   }, 4500);
 }
 
-// ---- Intro Overlay ----
 function initIntro() {
   var overlay = document.getElementById('introOverlay');
-  if (!overlay) return;
-  window.addEventListener('load', function() {
-    setTimeout(function() { overlay.classList.add('hide'); }, 1800);
+  var tagline = document.getElementById('introTagline');
+  if (!overlay || !tagline) return;
+
+  if (typeof Typed !== 'undefined') {
+    var typed = new Typed(tagline, {
+      strings: ['JESUS TRIBE · TCN ABUJA'],
+      typeSpeed: 45,
+      startDelay: 300,
+      showCursor: false,
+      cursorChar: '|',
+      onComplete: function() {
+        setTimeout(function() {
+          overlay.classList.add('hide');
+        }, 600);
+      }
+    });
+    window.typedInstance = typed; // store for click‑to‑skip
+  } else {
+    // Fallback static
+    tagline.textContent = 'JESUS TRIBE · TCN ABUJA';
+    setTimeout(function() {
+      overlay.classList.add('hide');
+    }, 2000);
+  }
+
+  // Click/tap to skip typing and close overlay
+  overlay.addEventListener('click', function() {
+    if (!overlay.classList.contains('hide')) {
+      overlay.classList.add('hide');
+      if (window.typedInstance) {
+        window.typedInstance.stop();
+        window.typedInstance.cursor.remove(); // remove blinking cursor
+      }
+    }
   });
 }
 
