@@ -221,6 +221,14 @@ h1,h2,h3,h4 {
   white-space: nowrap;         /* prevents wrapping during typing */
 }
 
+@media (max-width: 680px) {
+  .intro-tagline-wrapper{
+    left: -62px;
+  }
+}
+
+
+
 /* The tagline itself – left‑aligned, no absolute positioning needed */
 .intro-tagline {
   color: var(--gold);
