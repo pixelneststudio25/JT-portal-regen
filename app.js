@@ -30,7 +30,7 @@ function initIntro() {
   if (typeof Typed !== 'undefined') {
     var typed = new Typed(tagline, {
       strings: ['JESUS TRIBE · TCN ABUJA'],
-      typeSpeed: 50,
+      typeSpeed: 45,
       startDelay: 300,
       showCursor: false,
       cursorChar: '|',
@@ -183,14 +183,14 @@ function initFaq() {
 }
 
 // ============================================================
-//  NEW GALLERY WITH DRAG, SNAP, AND LIGHTBOX SWIPE NAVIGATION
+//  GALLERY WITH SMOOTH DRAG, SNAP, AND FIXED LIGHTBOX
 // ============================================================
 
 function initGallery() {
   var scroll = document.getElementById('galleryScroll');
   if (!scroll) return;
 
-  // ---- Your existing photos array (preserved exactly) ----
+  // ---- Your photos array (with years added) ----
   var photos = [
     { label: 'Moments', src: 'IMG-20260629-WA0003.jpg', edition: "It's Time, 2023" },
     { label: 'Moments', src: 'IMG-20260629-WA0004.jpg', edition: "Evolve, 2024" },
@@ -279,7 +279,6 @@ function initGallery() {
     { label: 'Games', src: '_MG_2690.jpg', edition: "Evolve, 2024" },
     { label: 'Activities', src: '_MG_2697.jpg', edition: "Evolve, 2024" },
     { label: 'Fellowship', src: '_MG_2699.jpg', edition: "Evolve, 2024" }
-    
   ];
 
   // Store globally for lightbox navigation
@@ -321,10 +320,14 @@ function initGallery() {
     scroll.appendChild(item);
   });
 
-  // ---- Drag / Snap Scroll (desktop & mobile) ----
+  // ---- SMOOTH DRAG & SNAP (with velocity) ----
   var isDragging = false;
   var startX = 0;
   var scrollLeft = 0;
+  var velocity = 0;
+  var lastX = 0;
+  var lastTime = 0;
+  var momentumFrame = null;
 
   function snapToNearest() {
     var items = scroll.querySelectorAll('.gallery-item');
@@ -362,14 +365,26 @@ function initGallery() {
     scrollLeft = scroll.scrollLeft;
     scroll.style.cursor = 'grabbing';
     scroll.style.scrollBehavior = 'auto';
+    velocity = 0;
+    lastX = e.pageX;
+    lastTime = Date.now();
+    if (momentumFrame) cancelAnimationFrame(momentumFrame);
   });
 
   window.addEventListener('mousemove', function(e) {
     if (!isDragging) return;
     e.preventDefault();
     var x = e.pageX - scroll.offsetLeft;
-    var walk = (x - startX) * 1.5;
+    var walk = (x - startX) * 1.2;
     scroll.scrollLeft = scrollLeft - walk;
+
+    var now = Date.now();
+    var dt = now - lastTime;
+    if (dt > 0) {
+      velocity = (e.pageX - lastX) / dt;
+    }
+    lastX = e.pageX;
+    lastTime = now;
   });
 
   window.addEventListener('mouseup', function() {
@@ -377,15 +392,26 @@ function initGallery() {
       isDragging = false;
       scroll.style.cursor = 'grab';
       scroll.style.scrollBehavior = 'smooth';
-      snapToNearest();
+      // Apply momentum if velocity is significant
+      if (Math.abs(velocity) > 0.3) {
+        var momentum = velocity * 100;
+        var target = scroll.scrollLeft - momentum;
+        scroll.scrollTo({ left: target, behavior: 'smooth' });
+        setTimeout(snapToNearest, 300);
+      } else {
+        snapToNearest();
+      }
     }
   });
 
-  // Touch swipe
+  // Touch swipe (with velocity)
   var touchStartX = 0;
   var touchStartY = 0;
   var touchScrollLeft = 0;
   var isSwiping = false;
+  var touchLastX = 0;
+  var touchLastTime = 0;
+  var touchVelocity = 0;
 
   scroll.addEventListener('touchstart', function(e) {
     touchStartX = e.touches[0].clientX;
@@ -393,22 +419,40 @@ function initGallery() {
     touchScrollLeft = scroll.scrollLeft;
     isSwiping = false;
     scroll.style.scrollBehavior = 'auto';
+    touchVelocity = 0;
+    touchLastX = touchStartX;
+    touchLastTime = Date.now();
   }, { passive: true });
 
   scroll.addEventListener('touchmove', function(e) {
     var deltaX = e.touches[0].clientX - touchStartX;
     var deltaY = e.touches[0].clientY - touchStartY;
-    if (Math.abs(deltaX) > Math.abs(deltaY) * 0.6) {
+    if (Math.abs(deltaX) > Math.abs(deltaY) * 0.5) {
       e.preventDefault();
       isSwiping = true;
       scroll.scrollLeft = touchScrollLeft - deltaX;
+
+      var now = Date.now();
+      var dt = now - touchLastTime;
+      if (dt > 0) {
+        touchVelocity = (e.touches[0].clientX - touchLastX) / dt;
+      }
+      touchLastX = e.touches[0].clientX;
+      touchLastTime = now;
     }
   }, { passive: false });
 
   scroll.addEventListener('touchend', function() {
     if (isSwiping) {
       scroll.style.scrollBehavior = 'smooth';
-      snapToNearest();
+      if (Math.abs(touchVelocity) > 0.3) {
+        var momentum = touchVelocity * 120;
+        var target = scroll.scrollLeft - momentum;
+        scroll.scrollTo({ left: target, behavior: 'smooth' });
+        setTimeout(snapToNearest, 300);
+      } else {
+        snapToNearest();
+      }
     }
     isSwiping = false;
   }, { passive: true });
@@ -418,14 +462,14 @@ function initGallery() {
   scroll.addEventListener('scroll', function() {
     clearTimeout(snapTimer);
     snapTimer = setTimeout(function() {
-      if (!isDragging) snapToNearest();
-    }, 150);
+      if (!isDragging && !isSwiping) snapToNearest();
+    }, 200);
   });
 
   scroll.style.cursor = 'grab';
 }
 
-// ---- LIGHTBOX with SWIPE NAVIGATION ----
+// ---- LIGHTBOX with SWIPE NAVIGATION (FIXED) ----
 var lightboxIndex = 0;
 
 function openLightbox(index) {
@@ -448,13 +492,27 @@ function showLightboxPhoto(index) {
   var photo = photos[index];
   if (!photo) return;
 
+  // Force a reload by resetting src
+  img.src = '';
+  img.style.display = 'none';
+  label.style.display = 'none';
+
   if (photo.src) {
+    img.onload = function() {
+      img.style.display = 'block';
+    };
+    img.onerror = function() {
+      img.style.display = 'none';
+      label.style.display = 'block';
+      label.textContent = photo.label || 'Image not available';
+    };
     img.src = photo.src;
     img.alt = photo.label || 'Camp photo';
-    img.style.display = 'block';
-    label.style.display = 'none';
+    // If the image is already cached, onload might fire immediately
+    if (img.complete) {
+      img.style.display = 'block';
+    }
   } else {
-    img.style.display = 'none';
     label.style.display = 'block';
     label.textContent = photo.label || 'Photo';
   }
@@ -514,13 +572,20 @@ function initLightboxSwipe() {
   if (!lightbox) return;
 
   var touchStartX = 0;
+  var touchStartY = 0;
 
   lightbox.addEventListener('touchstart', function(e) {
     touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
   }, { passive: true });
 
   lightbox.addEventListener('touchmove', function(e) {
-    e.preventDefault();
+    // Only prevent scroll if horizontal swipe is dominant
+    var deltaX = Math.abs(e.changedTouches[0].screenX - touchStartX);
+    var deltaY = Math.abs(e.changedTouches[0].screenY - touchStartY);
+    if (deltaX > deltaY * 0.6) {
+      e.preventDefault();
+    }
   }, { passive: false });
 
   lightbox.addEventListener('touchend', function(e) {
@@ -638,8 +703,8 @@ document.addEventListener('DOMContentLoaded', function() {
   initGallery();
   initTestimonials();
   initMobileCta();
-  initLightboxSwipe();          // <-- new
-  initRequirements();          // <-- moved here (was duplicated)
+  initLightboxSwipe();
+  initRequirements();
 
   // Lightbox close events
   var closeBtn = document.getElementById('lightboxClose');
@@ -651,6 +716,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Set current year in footer
   document.getElementById('year').textContent = new Date().getFullYear();
 });
