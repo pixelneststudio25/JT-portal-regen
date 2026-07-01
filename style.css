@@ -194,7 +194,13 @@ h1,h2,h3,h4 {
   box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
-/* ---- INTRO OVERLAY ---- */
+/* ============================================================
+   INTRO OVERLAY — typewriter fix
+   Formula: left: 50% + translateX(-logoSize/2) = logo's left edge
+   No JS needed. Change --logo-size in one place per breakpoint.
+   ============================================================ */
+
+/* ---- OVERLAY ---- */
 .intro-overlay {
   position: fixed; inset: 0; z-index: 1000;
   background: var(--bg-deep);
@@ -202,42 +208,57 @@ h1,h2,h3,h4 {
   opacity: 1; visibility: visible;
   transition: opacity 0.7s ease, visibility 0.7s ease;
 }
-.intro-overlay.hide { opacity:0; visibility:hidden; pointer-events:none; }
-.intro-logo { text-align:center; }
+.intro-overlay.hide {
+  opacity: 0; visibility: hidden; pointer-events: none;
+}
+
+/* ---- LOGO + TAGLINE STACK ---- */
+/* Flexbox column centers both children as a unit, automatically,
+   regardless of logo size or text length. No JS, no manual offsets. */
+.intro-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
 .intro-logo-svg {
-  width: 110px; height: 110px;
+  display: block;
+  width: 130px;
+  height: 130px;
   animation: logoIntro 1s ease-out forwards;
 }
-.intro-logo {
-  position: relative;          /* anchor for absolute child */
-  display: inline-block;       /* shrink‑wrap to the logo's width */
-  text-align: center;          /* keeps the logo itself centered */
-}
-/* New wrapper: centers the track */
+
+/* ---- TAGLINE ---- */
 .intro-tagline-wrapper {
-  position: absolute;
-  left: -58px;                     /* aligns perfectly with logo's left edge */
-  top: calc(100% + 20px);      /* sits just below the logo */
-  white-space: nowrap;         /* prevents wrapping during typing */
+  overflow: hidden;
+  white-space: nowrap;
 }
 
-@media (max-width: 680px) {
-  .intro-tagline-wrapper{
-    left: -70px;
-  }
-}
-
-
-
-/* The tagline itself – left‑aligned, no absolute positioning needed */
 .intro-tagline {
+  display: block;
   color: var(--gold);
   font-weight: 700;
   letter-spacing: 4px;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   margin: 0;
-  text-align: left;            
+  text-align: center;
+}
+
+/* ---- MOBILE ---- */
+@media (max-width: 680px) {
+  .intro-logo {
+    gap: 14px;
+  }
+  .intro-logo-svg {
+    width: 80px;
+    height: 80px;
+  }
+  .intro-tagline {
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+  }
 }
 
 /* ---- NAVIGATION ---- */
@@ -1334,3 +1355,5 @@ h1,h2,h3,h4 {
     max-width: 400px;
   }
 }
+
+
