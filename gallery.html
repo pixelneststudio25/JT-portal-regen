@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Jesus Tribe Camp | TCN Abuja</title>
+  <meta name="description" content="Explore photo memories from Jesus Tribe Abuja Summer Camp — It's Time (2023), Evolve (2024), and Grounded (2025)." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='44' fill='%231A1A1A' stroke='%23FFFFFF' stroke-width='0.8'/><text x='50%25' y='51%25' text-anchor='middle' dominant-baseline='central' font-family='Montserrat,sans-serif' font-weight='200' font-size='44' fill='%23FFFFFF' letter-spacing='-2'>JT</text></svg>" />
+ 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ---- Gallery Grid (overrides for full page) ---- */
+    .gallery-grid-wrap {
+      max-height: 800px;
+      overflow-y: auto;
+      padding-right: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gold) var(--bg-700);
+    }
+    .gallery-grid-wrap::-webkit-scrollbar {
+      width: 6px;
+      background: var(--bg-700);
+      border-radius: 10px;
+    }
+    .gallery-grid-wrap::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 10px;
+    }
+
+    .gallery-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+    }
+
+    .gallery-grid .gallery-item {
+      flex: 0 0 calc(25% - 14px);
+      min-width: 180px;
+      aspect-ratio: 4/3;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      position: relative;
+      background: var(--bg-700);
+      border: 1px solid var(--line);
+      transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+      cursor: pointer;
+    }
+
+    .gallery-grid .gallery-item:hover {
+      transform: scale(1.03);
+      box-shadow: 0 16px 32px rgba(202,165,60,0.3);
+    }
+
+    .gallery-grid .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-grid .edition-tag {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(6,8,14,0.85);
+      color: var(--gold);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 100px;
+      backdrop-filter: blur(6px);
+      pointer-events: auto;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      border: 1px solid rgba(202,165,60,0.2);
+    }
+
+    .gallery-grid .edition-tag:hover {
+      background: rgba(202,165,60,0.2);
+    }
+
+    /* ---- Filter Buttons ---- */
+    .gallery-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .filter-btn {
+      padding: 10px 26px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      background: transparent;
+      color: var(--text-soft);
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .filter-btn.active {
+      background: var(--gold);
+      color: var(--bg-deep);
+      border-color: var(--gold);
+      box-shadow: 0 8px 30px rgba(202,165,60,0.3);
+    }
+
+    .filter-btn:hover:not(.active) {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ---- Lightbox Nav (reused from main) ---- */
+    .lightbox-nav {
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      background: rgba(6, 8, 14, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 8px 20px;
+      border-radius: 100px;
+      border: 1px solid var(--glass-border);
+    }
+    .lightbox-nav button {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 2rem;
+      font-weight: 300;
+      padding: 0 8px;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      line-height: 1;
+    }
+    .lightbox-nav button:hover { color: var(--gold); }
+    .lightbox-counter {
+      color: var(--text-soft);
+      font-size: 0.9rem;
+      font-weight: 600;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 900px) {
+      .gallery-grid .gallery-item { flex: 0 0 calc(33.33% - 14px); }
+    }
+    @media (max-width: 680px) {
+      .gallery-grid .gallery-item { flex: 0 0 calc(50% - 14px); min-width: unset; }
+      .filter-btn { padding: 8px 16px; font-size: 0.75rem; }
+      .lightbox-nav { bottom: -50px; padding: 6px 16px; gap: 16px; }
+      .lightbox-nav button { font-size: 1.6rem; }
+      .lightbox-counter { font-size: 0.8rem; min-width: 50px; }
+    }
+    @media (max-width: 420px) {
+      .gallery-grid .gallery-item { flex: 0 0 calc(100% - 14px); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav class="nav scrolled" style="position:relative; background:rgba(6,8,14,0.9); border-bottom:1px solid var(--line);">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand">
+        <span class="nav-logo">
+          <span class="logo-fallback">JT</span>
+        </span>
+        <span class="nav-brand-text">
+          Jesus Tribe
+          <small>TCN ABUJA</small>
+        </span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#info">Camp Info</a></li>
+        <li><a href="requirements.html">Requirements</a></li>
+        <li><a href="gallery.html" style="color:var(--gold);">Gallery</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="https://docs.google.com/forms/d/1kpnIahSj8LwPsCqpc6NtySA5wL6x3ZLZyK99R5Oj99w/viewform?edit_requested=true" target="_blank" rel="noopener" class="btn btn-gold nav-register">Register</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== GALLERY PAGE ===== -->
+  <section class="section" style="padding-top:100px;">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Memories</span>
+        <h2>Full <span class="text-gradient">Gallery</span></h2>
+        <p>Browse through all the moments from our past camps — click any image to preview.</p>
+      </div>
+
+      <!-- FILTERS -->
+      <div class="gallery-filters reveal">
+        <button class="filter-btn active" data-edition="all">All Editions</button>
+        <button class="filter-btn" data-edition="It's Time, 2023">It's Time · 2023</button>
+        <button class="filter-btn" data-edition="Evolve, 2024">Evolve · 2024</button>
+        <button class="filter-btn" data-edition="Grounded, 2025">Grounded · 2025</button>
+      </div>
+
+      <!-- GRID -->
+      <div class="gallery-grid-wrap reveal">
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Back Link -->
+      <div style="text-align:center; margin-top:40px;">
+        <a href="index.html" style="color:var(--text-muted); font-weight:500; transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">← Back to Home</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LIGHTBOX ===== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="32" height="32"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
+      <img id="lightboxImg" alt="" style="display:none;" />
+      <div class="lightbox-placeholder" id="lightboxLabel">Photo</div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" style="margin-top:20px;">
+    <div class="container">
+      <div class="footer-grid" style="display:grid; grid-template-columns:2fr 1fr 1fr; gap:36px; margin-bottom:40px;">
+        <div>
+          <div class="footer-brand">
+            <span class="nav-logo"><span class="logo-fallback">JT</span></span>
+            <span class="nav-brand-text">Jesus Tribe<small style="color:var(--gold);">TCN ABUJA</small></span>
+          </div>
+          <p>The teenagers' ministry of The Covenant Nation, Abuja.</p>
+        </div>
+        <div>
+          <h5>Camp</h5>
+          <p>19–23 Aug 2026 · Abuja</p>
+          <p style="margin-top:6px; font-weight:600; color:var(--gold);">Theme: Different by Design</p>
+        </div>
+        <div>
+          <h5>Quick Links</h5>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="requirements.html">Requirements</a></li>
+            <li><a href="https://docs.google.com/forms/d/1kpnIahSj8LwPsCqpc6NtySA5wL6x3ZLZyK99R5Oj99w/viewform?edit_requested=true" target="_blank" rel="noopener">Register</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="border-top:1px solid var(--line); padding-top:22px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+        <small>© 2026 Jesus Tribe — TCN Abuja. All rights reserved.</small>
+        <a href="index.html" style="color:var(--text-faint);">Back to main site</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    // ============================================================
+    //  GALLERY — FULL FILTERABLE GRID
+    // ============================================================
+
+    var galleryPhotos = [];
+    var filteredPhotos = [];
+
+    // ---- PHOTOS ARRAY (full) ----
+    galleryPhotos = [
+      // Grounded, 2025
+      { label: 'Moments', src: 'IMG_5872.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'IMG_5900.jpg', edition: "Grounded, 2025" },
+      { label: 'Sessions', src: 'IMG_5908.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'IMG_6343.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'IMG_6397.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'IMG_6402.jpg', edition: "Grounded, 2025" },
+      { label: 'Creative Tracks', src: 'IMG_6419.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'IMG_6421.jpg', edition: "Grounded, 2025" },
+      { label: 'Camp Highlights', src: 'IMG_6460.jpg', edition: "Grounded, 2025" },
+      { label: 'Main Worship', src: 'IMG_6537.jpg', edition: "Grounded, 2025" },
+      { label: 'Arrival & Check-in', src: 'IMG_5181.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'IMG_5183.jpg', edition: "Grounded, 2025" },
+      { label: 'Moments', src: 'IMG_5189.jpg', edition: "Grounded, 2025" },
+      { label: 'Teaching Session', src: 'IMG_5192.jpg', edition: "Grounded, 2025" },
+      { label: 'Games & Fun', src: 'IMG_5200.jpg', edition: "Grounded, 2025" },
+      { label: 'Small Groups', src: 'IMG_5209.jpg', edition: "Grounded, 2025" },
+      { label: 'Prayer Session', src: 'IMG_5210.jpg', edition: "Grounded, 2025" },
+      { label: 'Group Activities', src: 'IMG_5215.jpg', edition: "Grounded, 2025" },
+
+      // It's Time, 2023
+      { label: 'Moments', src: 'IMG-20260629-WA0003.jpg', edition: "Grounded, 2025" },
+        { label: 'Moments', src: 'IMG-20260629-WA0004.jpg', edition: "Evolve, 2024" },
+        { label: 'Sessions', src: 'IMG-20260629-WA0005.jpg', edition: "Grounded, 2025" },
+        { label: 'Moments', src: 'IMG_5872.jpg', edition: "Grounded, 2025" },
+        { label: 'Moments', src: 'IMG_5900.jpg', edition: "Grounded, 2025" },
+        { label: 'Sessions', src: 'IMG_5908.jpg', edition: "Grounded, 2025" },
+        { label: 'Moments', src: 'IMG_6343.jpg', edition: "Grounded, 2025" },
+        { label: 'Moments', src: 'IMG_6397.jpg', edition: "Grounded, 2025" },
+        { label: 'Moments', src: 'IMG_6402.jpg', edition: "Grounded, 2025" },
+        { label: 'Creative Tracks', src: 'IMG_6419.jpg', edition: "Grounded, 2025" },
+        { label: 'Moments', src: 'IMG_6421.jpg', edition: "Grounded, 2025" },
+        { label: 'Camp Highlights', src: 'IMG_6460.jpg', edition: "Grounded, 2025" },
+        { label: 'Main Worship', src: 'IMG_6537.jpg', edition: "Grounded, 2025" },
+        { label: 'Arrival & Check-in', src: 'IMG_5181.jpg', edition: "Grounded, 2025" },
+        { label: 'Moments', src: 'IMG_5183.jpg', edition: "Grounded, 2025" },
+        { label: 'Moments', src: 'IMG_5189.jpg', edition: "Grounded, 2025" },
+        { label: 'Teaching Session', src: 'IMG_5192.jpg', edition: "Grounded, 2025" },
+        { label: 'Games & Fun', src: 'IMG_5200.jpg', edition: "Grounded, 2025" },
+        { label: 'Small Groups', src: 'IMG_5209.jpg', edition: "Grounded, 2025" },
+        { label: 'Prayer Session', src: 'IMG_5210.jpg', edition: "Grounded, 2025" },
+        { label: 'Group Activities', src: 'IMG_5215.jpg', edition: "Grounded, 2025" },
+
+        // It's Time, 2023 (20)
+        { label: 'Check-in', src: '_MG_0476.JPG', edition: "It's Time, 2023" },
+        { label: 'Moments', src: '_MG_0477.JPG', edition: "It's Time, 2023" },
+        { label: 'Workshop', src: '_MG_0487.JPG', edition: "It's Time, 2023" },
+        { label: 'Networking', src: '_MG_0488.JPG', edition: "It's Time, 2023" },
+        { label: 'Discussion', src: '_MG_0494.JPG', edition: "It's Time, 2023" },
+        { label: 'Community', src: '_MG_0496.JPG', edition: "It's Time, 2023" },
+        { label: 'Group Photo', src: '_MG_1285.JPG', edition: "It's Time, 2023" },
+        { label: 'Team', src: '_MG_1286.JPG', edition: "It's Time, 2023" },
+        { label: 'Learning', src: '_MG_1309.JPG', edition: "It's Time, 2023" },
+        { label: 'Audience', src: '_MG_1310.JPG', edition: "It's Time, 2023" },
+        { label: 'Creative Session', src: '_MG_1311.JPG', edition: "It's Time, 2023" },
+        { label: 'Workshop', src: '_MG_1313.JPG', edition: "It's Time, 2023" },
+        { label: 'Speakers', src: '_MG_1315.JPG', edition: "It's Time, 2023" },
+        { label: 'Collaboration', src: '_MG_1316.JPG', edition: "It's Time, 2023" },
+        { label: 'Presentation', src: '_MG_1319.JPG', edition: "It's Time, 2023" },
+        { label: 'Discussion', src: '_MG_1320.JPG', edition: "It's Time, 2023" },
+        { label: 'Portrait', src: '_MG_1321.JPG', edition: "It's Time, 2023" },
+        { label: 'Community', src: '_MG_1328.JPG', edition: "It's Time, 2023" },
+        { label: 'Interaction', src: '_MG_1331.JPG', edition: "It's Time, 2023" },
+        { label: 'Teaching', src: '_MG_1334.JPG', edition: "It's Time, 2023" },
+
+        // Evolve, 2024 – Stage & Indoor (20)
+        { label: 'Audience', src: '_MG_2473.jpg', edition: "Evolve, 2024" },
+        { label: 'Check-in', src: '_MG_2475.jpg', edition: "Evolve, 2024" },
+        { label: 'Speaker', src: '_MG_2476.jpg', edition: "Evolve, 2024" },
+        { label: 'Presentation', src: '_MG_2478.jpg', edition: "Evolve, 2024" },
+        { label: 'Discussion', src: '_MG_2483.jpg', edition: "Evolve, 2024" },
+        { label: 'Audience', src: '_MG_2484.jpg', edition: "Evolve, 2024" },
+        { label: 'Worship', src: '_MG_2486.jpg', edition: "Evolve, 2024" },
+        { label: 'Praise', src: '_MG_2487.jpg', edition: "Evolve, 2024" },
+        { label: 'Moments', src: '_MG_2490.jpg', edition: "Evolve, 2024" },
+        { label: 'Community', src: '_MG_2493.jpg', edition: "Evolve, 2024" },
+        { label: 'Engagement', src: '_MG_2495.jpg', edition: "Evolve, 2024" },
+        { label: 'Audience', src: '_MG_2497.jpg', edition: "Evolve, 2024" },
+        { label: 'Learning', src: '_MG_2500.jpg', edition: "Evolve, 2024" },
+        { label: 'Discussion', src: '_MG_2502.jpg', edition: "Evolve, 2024" },
+        { label: 'Celebration', src: '_MG_2510.jpg', edition: "Evolve, 2024" },
+        { label: 'Speaker', src: '_MG_2511.jpg', edition: "Evolve, 2024" },
+        { label: 'Panel', src: '_MG_2518.jpg', edition: "Evolve, 2024" },
+        { label: 'Conversation', src: '_MG_2541.jpg', edition: "Evolve, 2024" },
+        { label: 'Portrait', src: '_MG_2549.jpg', edition: "Evolve, 2024" },
+        { label: 'Session', src: '_MG_2556.jpg', edition: "Evolve, 2024" },
+
+        // Evolve, 2024 – Outdoor & Activities (20)
+        { label: 'Panel', src: '_MG_2566.jpg', edition: "Evolve, 2024" },
+        { label: 'Discussion', src: '_MG_2568.jpg', edition: "Evolve, 2024" },
+        { label: 'Moments', src: '_MG_2576.jpg', edition: "Evolve, 2024" },
+        { label: 'Portrait', src: '_MG_2581.jpg', edition: "Evolve, 2024" },
+        { label: 'Speaker', src: '_MG_2582.jpg', edition: "Evolve, 2024" },
+        { label: 'Volunteer', src: '_MG_2587.jpg', edition: "Evolve, 2024" },
+        { label: 'Group Photo', src: '_MG_2590.jpg', edition: "Evolve, 2024" },
+        { label: 'Team', src: '_MG_2592.jpg', edition: "Evolve, 2024" },
+        { label: 'Sports', src: '_MG_2623.jpg', edition: "Evolve, 2024" },
+        { label: 'Basketball', src: '_MG_2641.jpg', edition: "Evolve, 2024" },
+        { label: 'Community', src: '_MG_2644.jpg', edition: "Evolve, 2024" },
+        { label: 'Activities', src: '_MG_2646.jpg', edition: "Evolve, 2024" },
+        { label: 'Moments', src: '_MG_2648.jpg', edition: "Evolve, 2024" },
+        { label: 'Football', src: '_MG_2665.jpg', edition: "Evolve, 2024" },
+        { label: 'Teamwork', src: '_MG_2679.jpg', edition: "Evolve, 2024" },
+        { label: 'Basketball', src: '_MG_2685.jpg', edition: "Evolve, 2024" },
+        { label: 'Games', src: '_MG_2690.jpg', edition: "Evolve, 2024" },
+        { label: 'Activities', src: '_MG_2697.jpg', edition: "Evolve, 2024" },
+        { label: 'Fellowship', src: '_MG_2699.jpg', edition: "Evolve, 2024" }
+    ];
+
+    // ---- Render function ----
+    function renderGallery(edition) {
+      var grid = document.getElementById('galleryGrid');
+      if (!grid) return;
+
+      grid.innerHTML = '';
+      filteredPhotos = edition === 'all'
+        ? galleryPhotos
+        : galleryPhotos.filter(function(p) { return p.edition === edition; });
+
+      if (filteredPhotos.length === 0) {
+        grid.innerHTML = '<p style="color:var(--text-muted); text-align:center; width:100%; padding:40px 0;">No photos for this edition yet.</p>';
+        window._filteredPhotos = [];
+        return;
+      }
+
+      filteredPhotos.forEach(function(photo, index) {
+        var item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.dataset.index = index;
+
+        var img = document.createElement('img');
+        img.src = photo.src;
+        img.alt = photo.label;
+        img.loading = 'lazy';
+        img.onerror = function() {
+          this.style.display = 'none';
+          var fb = item.querySelector('.placeholder-fallback');
+          if (fb) fb.style.display = 'flex';
+        };
+        item.appendChild(img);
+
+        var fallback = document.createElement('div');
+        fallback.className = 'placeholder-content placeholder-fallback';
+        fallback.style.display = 'none';
+        fallback.innerHTML = '<svg viewBox="0 0 24 24" width="28" height="28"><rect x="2" y="3" width="20" height="16" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/><path d="M21 15l-5-5L5 21" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>JT Camp</span>';
+        item.appendChild(fallback);
+
+        var tag = document.createElement('span');
+        tag.className = 'edition-tag';
+        tag.textContent = photo.edition || 'Moments';
+        item.appendChild(tag);
+
+        item.addEventListener('click', function() {
+          var idx = parseInt(this.dataset.index);
+          openLightbox(idx);
+        });
+
+        grid.appendChild(item);
+      });
+
+      window._filteredPhotos = filteredPhotos;
+    }
+
+    // ---- Filter buttons ----
+    var btns = document.querySelectorAll('.filter-btn');
+    btns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        btns.forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        renderGallery(this.dataset.edition);
+      });
+    });
+
+    // ---- Clicking tag filters ----
+    document.getElementById('galleryGrid').addEventListener('click', function(e) {
+      var tag = e.target.closest('.edition-tag');
+      if (tag) {
+        e.stopPropagation();
+        var edition = tag.textContent.trim();
+        var btns = document.querySelectorAll('.filter-btn');
+        btns.forEach(function(btn) {
+          if (btn.dataset.edition === edition || btn.textContent.trim() === edition) {
+            btn.click();
+          }
+        });
+      }
+    });
+
+    // ---- Initial render ----
+    renderGallery('all');
+
+    // ============================================================
+    //  LIGHTBOX (filtered)
+    // ============================================================
+
+    var lightboxIndex = 0;
+
+    function openLightbox(index) {
+      var photos = window._filteredPhotos || [];
+      if (!photos.length) return;
+      lightboxIndex = index;
+      showLightboxPhoto(index);
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function showLightboxPhoto(index) {
+      var photos = window._filteredPhotos || [];
+      var img = document.getElementById('lightboxImg');
+      var label = document.getElementById('lightboxLabel');
+      if (!img || !label) return;
+      var photo = photos[index];
+      if (!photo) return;
+
+      if (photo.src) {
+        img.src = photo.src;
+        img.alt = photo.label || 'Camp photo';
+        img.style.display = 'block';
+        label.style.display = 'none';
+      } else {
+        img.style.display = 'none';
+        label.style.display = 'block';
+        label.textContent = photo.label || 'Photo';
+      }
+      updateLightboxNav(index, photos.length);
+    }
+
+    function updateLightboxNav(current, total) {
+      var lightbox = document.getElementById('lightbox');
+      if (!lightbox) return;
+      var nav = lightbox.querySelector('.lightbox-nav');
+      if (!nav) {
+        nav = document.createElement('div');
+        nav.className = 'lightbox-nav';
+        nav.innerHTML = `
+          <button class="lightbox-prev" aria-label="Previous">‹</button>
+          <span class="lightbox-counter">${current + 1} / ${total}</span>
+          <button class="lightbox-next" aria-label="Next">›</button>
+        `;
+        lightbox.querySelector('.lightbox-content').appendChild(nav);
+        nav.querySelector('.lightbox-prev').addEventListener('click', function(e) {
+          e.stopPropagation();
+          lightboxNavigate(-1);
+        });
+        nav.querySelector('.lightbox-next').addEventListener('click', function(e) {
+          e.stopPropagation();
+          lightboxNavigate(1);
+        });
+      }
+      var counter = nav.querySelector('.lightbox-counter');
+      if (counter) counter.textContent = (current + 1) + ' / ' + total;
+    }
+
+    function lightboxNavigate(direction) {
+      var photos = window._filteredPhotos || [];
+      if (!photos.length) return;
+      var newIndex = lightboxIndex + direction;
+      if (newIndex < 0) newIndex = photos.length - 1;
+      if (newIndex >= photos.length) newIndex = 0;
+      lightboxIndex = newIndex;
+      showLightboxPhoto(lightboxIndex);
+    }
+
+    function closeLightbox() {
+      var lightbox = document.getElementById('lightbox');
+      if (lightbox) {
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // ---- Lightbox events ----
+    var closeBtn = document.getElementById('lightboxClose');
+    if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+    var lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+      lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+
+      // Touch swipe
+      var touchStartX = 0;
+      lightbox.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+      lightbox.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+      }, { passive: false });
+      lightbox.addEventListener('touchend', function(e) {
+        var diff = touchStartX - e.changedTouches[0].screenX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) lightboxNavigate(1);
+          else lightboxNavigate(-1);
+        }
+      }, { passive: true });
+    }
+
+    // ---- Keyboard ----
+    document.addEventListener('keydown', function(e) {
+      var lb = document.getElementById('lightbox');
+      if (!lb || !lb.classList.contains('open')) return;
+      if (e.key === 'ArrowLeft') lightboxNavigate(-1);
+      if (e.key === 'ArrowRight') lightboxNavigate(1);
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // ---- Scroll reveal (simple) ----
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(r) { obs.observe(r); });
+    } else {
+      reveals.forEach(function(r) { r.classList.add('visible'); });
+    }
+  </script>
+
+</body>
+</html>
