@@ -2,36 +2,47 @@
   <!-- Outer black circle -->
   <circle cx="50" cy="50" r="50" fill="#0a0a0a"/>
 
-  <!-- Thin white ring border -->
-  <circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+  <!-- Outer white ring -->
+  <circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-width="1.8"/>
 
-  <!-- Inner white ring (double border effect matching logo) -->
-  <circle cx="50" cy="50" r="43" fill="none" stroke="#ffffff" stroke-width="0.75"/>
+  <!-- Inner white ring (double border effect) -->
+  <circle cx="50" cy="50" r="42.5" fill="none" stroke="#ffffff" stroke-width="0.8"/>
 
-  <!-- J letter - positioned left, slightly overlapping T -->
+  <!--
+    LAYOUT LOGIC (matching original logo):
+    - T sits HIGHER — its top crossbar is near the top of the circle
+    - T's vertical stem runs down the center-right
+    - J sits LOWER — its body is behind/under the T stem
+    - J's hook curves down and left at the bottom
+    - They share the center zone, T slightly right of center, J slightly left
+    - Both are rendered with a black stroke outline so letters separate cleanly
+  -->
+
+  <!-- J — rendered FIRST so T stem sits on top of it -->
   <text
-    x="29"
-    y="63"
-    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+    x="40"
+    y="68"
+    font-family="'Arial Black', 'Impact', 'Helvetica Neue', Arial, sans-serif"
     font-weight="900"
-    font-size="46"
+    font-size="52"
     fill="#ffffff"
-    letter-spacing="-2"
+    stroke="#0a0a0a"
+    stroke-width="2"
+    paint-order="stroke fill"
     text-anchor="middle"
   >J</text>
 
-  <!-- T letter - positioned right, slightly overlapping J -->
+  <!-- T — rendered SECOND (on top), shifted right and UP so crossbar clears J's top -->
   <text
-    x="63"
-    y="63"
-    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+    x="58"
+    y="58"
+    font-family="'Arial Black', 'Impact', 'Helvetica Neue', Arial, sans-serif"
     font-weight="900"
-    font-size="46"
+    font-size="52"
     fill="#ffffff"
-    letter-spacing="-2"
+    stroke="#0a0a0a"
+    stroke-width="2"
+    paint-order="stroke fill"
     text-anchor="middle"
   >T</text>
-
-  <!-- Subtle bottom stroke line (mimics logo's base detail) -->
-  <line x1="24" y1="70" x2="76" y2="70" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
 </svg>
